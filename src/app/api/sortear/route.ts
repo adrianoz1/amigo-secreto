@@ -49,7 +49,7 @@ export async function POST(request: Request) {
     const sorteio = realizarSorteio(participantes);
     console.log('Sorteio:', sorteio); // Remover após teste
     for (const participante of sorteio) {
-      resend.emails.send({
+      await resend.emails.send({
         from: 'contato@a2dev.com.br',
         to: participante.email,
         subject: 'Amigo secreto',
@@ -87,14 +87,15 @@ export async function POST(request: Request) {
       }).then(
         () => {
           console.log(`E-mail enviado para ${participante.email}`)
-          return NextResponse.json({ message: 'Sorteio realizado e e-mails sendo enviados com sucesso!' });
         },
         (error) => {
           console.error('Erro ao enviar e-mail:', error);
-          return NextResponse.json({ error: `Erro ao enviar e-mail. ${participante.email}` }, { status: 500 });
         },
       );
     }
+
+    return NextResponse.json({ message: 'Sorteio realizado e e-mails sendo enviados com sucesso!' });
+
 
   } catch (error) {
     return NextResponse.json({ error: (error as Error).message }, { status: 400 });
