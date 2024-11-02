@@ -50,7 +50,7 @@ export async function POST(request: Request) {
     console.log('Sorteio:', sorteio); // Remover após teste
     for (const participante of sorteio) {
       await resend.emails.send({
-        from: 'contato@a2dev.com.br',
+        from: 'contato@amigosecretofacil.com.br',
         to: participante.email,
         subject: 'Amigo secreto',
         html: `
@@ -75,10 +75,10 @@ export async function POST(request: Request) {
               </div>
               <div style="background-color: #f3f4f6; color: #6b7280; text-align: center; padding: 15px; font-size: 14px;">
                 <p style="margin: 0;">
-                  Se tiver alguma dúvida, entre em contato conosco em <a href="mailto:contato@a2dev.com.br" style="color: #3b82f6;">contato@a2dev.com.br</a>.
+                  Se tiver alguma dúvida, entre em contato conosco em <a href="mailto:contato@amigosecretofacil.com.br" style="color: #3b82f6;">contato@amigosecretofacil.com.br</a>.
                 </p>
                 <p style="margin: 0; font-size: 12px; color: #9ca3af;">
-                  © 2024 A2 Dev. Todos os direitos reservados.
+                  © 2024 Amigo Secreto Fácil. Todos os direitos reservados.
                 </p>
               </div>
             </div>
