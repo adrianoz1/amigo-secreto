@@ -20,7 +20,7 @@ const shuffle = (array: Participante[]): Participante[] => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const realizarSorteio = (participantes: Participante[]): any[] => {
   const adriano = participantes.find(p => p.email === 'adrianoo.luis.almeida@gmail.com');
-  const mei = participantes.find(p => p.email === 'adrianoo.nando@gmail.com');
+  const mei = participantes.find(p => p.email === 'oliveira.meirelis@gmail.com');
   let outrosParticipantes = participantes;
 
   if (adriano && mei) {
