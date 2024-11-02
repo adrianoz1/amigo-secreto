@@ -48,51 +48,54 @@ export async function POST(request: Request) {
   try {
     const sorteio = realizarSorteio(participantes);
     console.log('Sorteio:', sorteio); // Remover após teste
-    sorteio.forEach((participante, index) => {
-      setTimeout(() => {
-        resend.emails.send({
-          from: 'contato@a2dev.com.br',
-          to: participante.email,
-          subject: 'Amigo secreto',
-          html: `
-            <div style="background-color: #f3f4f6; padding: 20px; font-family: Arial, sans-serif; color: #111827;">
-              <div style="max-width: 600px; margin: auto; background-color: white; border-radius: 8px; overflow: hidden;">
-                <div style="background-color: #3b82f6; color: white; padding: 15px 20px; text-align: center;">
-                  <h1 style="margin: 0; font-size: 24px;">Sorteio de Amigo Secreto 🎉</h1>
-                </div>
-                <div style="padding: 20px;">
-                  <p style="font-size: 18px; color: #111827;">
-                    Olá, <strong>${participante.nome}</strong>!
-                  </p>
-                  <p style="font-size: 16px; color: #4b5563;">
-                    Chegou o momento esperado! O sorteio de amigo secreto foi realizado, e nós temos uma notícia para você:
-                  </p>
-                  <p style="font-size: 20px; font-weight: bold; color: #22c55e; text-align: center; margin: 20px 0;">
-                    Seu amigo secreto é: <span style="color: #3b82f6;">${participante.amigo.nome}</span>!
-                  </p>
-                  <p style="font-size: 16px; color: #4b5563;">
-                    Lembre-se de manter essa informação em segredo e boa sorte na escolha do presente! 
-                  </p>
-                </div>
-                <div style="background-color: #f3f4f6; color: #6b7280; text-align: center; padding: 15px; font-size: 14px;">
-                  <p style="margin: 0;">
-                    Se tiver alguma dúvida, entre em contato conosco em <a href="mailto:contato@a2dev.com.br" style="color: #3b82f6;">contato@a2dev.com.br</a>.
-                  </p>
-                  <p style="margin: 0; font-size: 12px; color: #9ca3af;">
-                    © 2024 A2 Dev. Todos os direitos reservados.
-                  </p>
-                </div>
+    for (const participante of sorteio) {
+      resend.emails.send({
+        from: 'contato@a2dev.com.br',
+        to: participante.email,
+        subject: 'Amigo secreto',
+        html: `
+          <div style="background-color: #f3f4f6; padding: 20px; font-family: Arial, sans-serif; color: #111827;">
+            <div style="max-width: 600px; margin: auto; background-color: white; border-radius: 8px; overflow: hidden;">
+              <div style="background-color: #3b82f6; color: white; padding: 15px 20px; text-align: center;">
+                <h1 style="margin: 0; font-size: 24px;">Sorteio de Amigo Secreto 🎉</h1>
+              </div>
+              <div style="padding: 20px;">
+                <p style="font-size: 18px; color: #111827;">
+                  Olá, <strong>${participante.nome}</strong>!
+                </p>
+                <p style="font-size: 16px; color: #4b5563;">
+                  Chegou o momento esperado! O sorteio de amigo secreto foi realizado, e nós temos uma notícia para você:
+                </p>
+                <p style="font-size: 20px; font-weight: bold; color: #22c55e; text-align: center; margin: 20px 0;">
+                  Seu amigo secreto é: <span style="color: #3b82f6;">${participante.amigo.nome}</span>!
+                </p>
+                <p style="font-size: 16px; color: #4b5563;">
+                  Lembre-se de manter essa informação em segredo e boa sorte na escolha do presente! 
+                </p>
+              </div>
+              <div style="background-color: #f3f4f6; color: #6b7280; text-align: center; padding: 15px; font-size: 14px;">
+                <p style="margin: 0;">
+                  Se tiver alguma dúvida, entre em contato conosco em <a href="mailto:contato@a2dev.com.br" style="color: #3b82f6;">contato@a2dev.com.br</a>.
+                </p>
+                <p style="margin: 0; font-size: 12px; color: #9ca3af;">
+                  © 2024 A2 Dev. Todos os direitos reservados.
+                </p>
               </div>
             </div>
-          `,
-        }).then(
-          () => console.log(`E-mail enviado para ${participante.email}`),
-          (error) => console.error(`Erro ao enviar e-mail para ${participante.email}:`, error),
-        );
-      }, index * 1000);
-    });
+          </div>
+        `,
+      }).then(
+        () => {
+          console.log(`E-mail enviado para ${participante.email}`)
+          return NextResponse.json({ message: 'Sorteio realizado e e-mails sendo enviados com sucesso!' });
+        },
+        (error) => {
+          console.error('Erro ao enviar e-mail:', error);
+          return NextResponse.json({ error: `Erro ao enviar e-mail. ${participante.email}` }, { status: 500 });
+        },
+      );
+    }
 
-    return NextResponse.json({ message: 'Sorteio realizado e e-mails sendo enviados com sucesso!' });
   } catch (error) {
     return NextResponse.json({ error: (error as Error).message }, { status: 400 });
   }
