@@ -44,10 +44,10 @@ const realizarSorteio = (participantes: Participante[]): any[] => {
 
 export async function POST(request: Request) {
   const { participantes }: { participantes: Participante[] } = await request.json();
-
+  console.log('Participantes:', participantes); // Remover após teste
   try {
     const sorteio = realizarSorteio(participantes);
-
+    console.log('Sorteio:', sorteio); // Remover após teste
     sorteio.forEach((participante, index) => {
       setTimeout(() => {
         resend.emails.send({
