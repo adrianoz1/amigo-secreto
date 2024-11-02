@@ -42,6 +42,8 @@ const realizarSorteio = (participantes: Participante[]): any[] => {
   return sorteio;
 };
 
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export async function POST(request: Request) {
   const { participantes }: { participantes: Participante[] } = await request.json();
   console.log('Participantes:', participantes); // Remover após teste
@@ -85,13 +87,15 @@ export async function POST(request: Request) {
           </div>
         `,
       }).then(
-        () => {
+        async () => {
           console.log(`E-mail enviado para ${participante.email}`)
+          await delay(500);
         },
         (error) => {
           console.error('Erro ao enviar e-mail:', error);
         },
       );
+
     }
 
     return NextResponse.json({ message: 'Sorteio realizado e e-mails sendo enviados com sucesso!' });
