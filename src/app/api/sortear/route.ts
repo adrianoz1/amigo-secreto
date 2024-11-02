@@ -85,7 +85,10 @@ export async function POST(request: Request) {
               </div>
             </div>
           `,
-        });
+        }).then(
+          () => console.log(`E-mail enviado para ${participante.email}`),
+          (error) => console.error(`Erro ao enviar e-mail para ${participante.email}:`, error),
+        );
       }, index * 1000);
     });
 
