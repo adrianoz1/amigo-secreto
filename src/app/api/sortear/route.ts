@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+console.log("API Key:", process.env.RESEND_API_KEY); // Remover após teste
 
 interface Participante {
   nome: string;
