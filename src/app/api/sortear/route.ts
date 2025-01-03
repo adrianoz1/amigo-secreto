@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-console.log("API Key:", process.env.RESEND_API_KEY); // Remover após teste
 
 interface Participante {
   nome: string;
@@ -17,17 +16,15 @@ const shuffle = (array: Participante[]): Participante[] => {
   return array;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const realizarSorteio = (participantes: Participante[]): any[] => {
-  const adriano = participantes.find(p => p.email === 'adrianoo.luis.almeida@gmail.com');
-  const mei = participantes.find(p => p.email === 'oliveira.meirelis@gmail.com');
+  const teste1 = participantes.find(p => p.email === 'teste1@gmail.com');
+  const teste2 = participantes.find(p => p.email === 'teste2@gmail.com');
   let outrosParticipantes = participantes;
 
-  if (adriano && mei) {
-    outrosParticipantes = participantes.filter(p => p.email !== adriano.email && p.email !== mei.email);
+  if (teste1 && teste2) {
+    outrosParticipantes = participantes.filter(p => p.email !== teste1.email && p.email !== teste2.email);
   }
   const embaralhado = shuffle(outrosParticipantes.slice());
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sorteio: any[] = [];
 
   for (let i = 0; i < embaralhado.length; i++) {
@@ -35,9 +32,9 @@ const realizarSorteio = (participantes: Participante[]): any[] => {
     sorteio.push({ nome: embaralhado[i].nome, email: embaralhado[i].email, amigo: embaralhado[amigoIndex] });
   }
 
-  if (adriano && mei) {
-    sorteio.push({ nome: adriano.nome, email: adriano.email, amigo: mei });
-    sorteio.push({ nome: mei.nome, email: mei.email, amigo: adriano });
+  if (teste1 && teste2) {
+    sorteio.push({ nome: teste1.nome, email: teste1.email, amigo: teste2 });
+    sorteio.push({ nome: teste2.nome, email: teste2.email, amigo: teste1 });
   }
   return sorteio;
 };
@@ -46,10 +43,8 @@ const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export async function POST(request: Request) {
   const { participantes }: { participantes: Participante[] } = await request.json();
-  console.log('Participantes:', participantes); // Remover após teste
   try {
     const sorteio = realizarSorteio(participantes);
-    console.log('Sorteio:', sorteio); // Remover após teste
     for (const participante of sorteio) {
       await resend.emails.send({
         from: 'contato@amigosecretofacil.com.br',
